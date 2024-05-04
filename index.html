@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Data</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="top">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search By name or Symbol"/>
+  <button onclick="search()">Search</button>
+  </div>
+  <button onclick="sortData('marketCap')">Sort by Market Cap</button>
+  <button onclick="sortData('percentageChange')">Sort by Percentage Change</button>
+  </div>
+  <table id="cryptoTable">
+    <thead>
+      <tr>
+        <!-- <th>Image</th> -->
+        <th>Name</th>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>Volume</th>
+        <th>Market Cap</th>
+        <th>Percentage Change (24h)</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+    </tbody>
+  </table>
+<script src="script.js"></script>
+</body>
+</html>
