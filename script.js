@@ -25,8 +25,7 @@
     data.forEach(coin => {
       const row = document.createElement('tr');
       row.innerHTML = `
-    //   <td>${coin.image}</td>
-      <td>${coin.name}</td>
+        <td>${coin.name}</td>
         <td>${coin.symbol}</td>
         <td>${coin.current_price}</td>
         <td>${coin.total_volume}</td>
