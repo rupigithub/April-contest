@@ -1,9 +1,11 @@
+  const apiUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false"
+ 
  // Function to fetch data using async/await
  async function fetchDataAsyncAwait() {
     try {
-      const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false');
+      const response = await fetch(apiUrl);
       const data = await response.json();
-      return data;
+      renderTable(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -11,7 +13,7 @@
 
   // Function to fetch data using .then
   function fetchDataWithThen() {
-    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false')
+    fetch(apiUrl)
       .then(response => response.json())
       .then(data => renderTable(data))
       .catch(error => console.error('Error fetching data:', error));
@@ -25,32 +27,39 @@
     data.forEach(coin => {
       const row = document.createElement('tr');
       row.innerHTML = `
+        <td><img src="${coin.image} alt="${coin.name}" width="30"></td>
         <td>${coin.name}</td>
         <td>${coin.symbol}</td>
         <td>${coin.current_price}</td>
         <td>${coin.total_volume}</td>
         <td>${coin.market_cap}</td>
-        <td>${coin.price_change_percentage_24h}</td>
+        <td>${coin.market_cap_change_percentage_24h}</td>
       `;
       tableBody.appendChild(row);
     });
   }
 
   // Function to handle sorting
-  function sortData(key) {
-    const tableBody = document.getElementById('tableBody');
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
+  document.getElementById('sortMarketCap').addEventListener('click', () => {
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const sortedData = data.sort((a, b) => a.market_cap - b.market_cap);
+        renderTable(sortedData);
+    })
+    .catch(error => console.error('Error fetching data:', error));
+});
 
-    rows.sort((a, b) => {
-      const aValue = parseFloat(a.querySelector(`td:nth-child(${key === 'marketCap' ? 5 : 6})`).textContent.replace(/[$,]/g, ''));
-      const bValue = parseFloat(b.querySelector(`td:nth-child(${key === 'marketCap' ? 5 : 6})`).textContent.replace(/[$,]/g, ''));
-
-      return aValue - bValue;
-    });
-
-    tableBody.innerHTML = '';
-    rows.forEach(row => tableBody.appendChild(row));
-  }
+document.getElementById('sortPercentageChange').addEventListener('click', () => {
+  fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    const sortedData = data.sort((a, b) => a.market_cap_change_percentage_24h - b.market_cap_change_percentage_24h);
+    renderTable(sortedData);
+})
+.catch(error => console.error('Error fetching data:', error));
+});
+  
 
   // Function to handle search
   function search() {
@@ -70,7 +79,7 @@
   }
 
   // Initial fetch using async/await
-  fetchDataAsyncAwait().then(data => renderTable(data));
+  fetchDataAsyncAwait();
 
   // Initial fetch using .then
   // fetchDataWithThen();
